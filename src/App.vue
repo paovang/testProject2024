@@ -1,4 +1,7 @@
 <script setup lang="ts">
+  import { provide } from 'vue';
+
+  provide('message', 'hello world 2024!')
 </script>
 
 <template>
