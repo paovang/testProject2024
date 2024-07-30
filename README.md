@@ -10,3 +10,7 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 
 https://www.youtube.com/watch?v=3L_9jhHbWkc
+
+
+
+pnpm install vee-validate yup
