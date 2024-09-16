@@ -1,6 +1,10 @@
 <template>
   <div>
-    <button class="button is-primary" @click="openModal">Add New</button>
+    <button @click="setLocale('en')">EN</button>
+    <button @click="setLocale('la')">LA</button>
+    <hr/>
+    <button class="button is-primary" @click="openModal">{{ $t('message.button_add') }}</button>
+    <h1>{{ $t('message.hello') }}</h1>
     <hr/>
     <table class="table is-striped is-fullwidth">
         <thead>
@@ -19,19 +23,20 @@
             <td>{{item.currency}}</td>
             <td>{{item.created_at}}</td>
             <td>
-              <i class="fas fa-pen" style="width: 50px; color: blue"></i>
-              <i class="fas fa-trash" style="color: red"></i>
+              <i class="fas fa-pen" style="width: 50px; color: blue" @click="openUpdate(item.id)"></i>
+              <i class="fas fa-trash" style="color: red" @click="openDelete(item.id)"></i>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <div class="modal" :class="{ 'is-active': isModalActive }">
+      <!-- Modal Add -->
+      <div class="modal" :class="{ 'is-active': isModalAddActive }">
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">Modal title</p>
-            <button class="delete" aria-label="close" @click="isModalActive = false"></button>
+            <button class="delete" aria-label="close" @click="isModalAddActive = false"></button>
           </header>
           <section class="modal-card-body">
             <form @submit.prevent="onSubmit">
@@ -64,6 +69,48 @@
           </section>
         </div>
       </div>
+      <!-- End Modal Add -->
+
+      <!-- Modal Update -->
+      <div class="modal" :class="{ 'is-active': isModalUpdateActive }">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Modal Update title</p>
+            <button class="delete" aria-label="close" @click="isModalUpdateActive = false"></button>
+          </header>
+          <section class="modal-card-body">
+            <form @submit.prevent="onSubmitUpdate">
+              <div class="field">
+                <input
+                  class="input is-link"
+                  type="text"
+                  v-model="name"
+                  placeholder="Please enter name"
+                  :class="{ 'is-danger': errors.name }"
+                />
+                <p v-if="errors.name" class="help is-danger">{{ errors.name }}</p>
+              </div>
+              <div class="field">
+                <input
+                  class="input is-link"
+                  type="text"
+                  v-model="currency"
+                  :class="{ 'is-danger': errors.currency }"
+                  placeholder="Please enter currency"
+                />
+                <p v-if="errors.currency" class="help is-danger">{{ errors.currency }}</p>
+              </div>
+              <footer class="modal-card-foot">
+              <div class="buttons">
+                <button type="submit" class="button is-success">Update Data</button>
+              </div>
+            </footer>
+          </form>
+          </section>
+        </div>
+      </div>
+      <!-- End Modal Update -->
 
   </div>
 </template>
@@ -79,11 +126,16 @@
   const validationSchema = yup.object({
     name: yup.string().required('Please enter name.'),
     currency: yup.string()
-        .required('Please enter currency.')
-        .max(3, 'Currency must be at most 3 characters.')
+      .required('Please enter currency.')
+      .max(3, 'Currency must be at most 3 characters.')
   });
 
-  const { handleSubmit, errors } = useForm({
+  const setLocale = (value: string) => {
+    localStorage.setItem('locale', value);
+    window.location.reload();
+  }
+
+  const { handleSubmit, errors, setValues } = useForm({
     validationSchema
   });
 
@@ -93,12 +145,31 @@
   const onSubmit = handleSubmit(async(value) => {
     console.log('Submitted values:', value);
   });
- 
 
-  const isModalActive = ref(false);
+  const onSubmitUpdate = handleSubmit(async(value) => {
+    console.log('Submitted Update values:', value);
+  });
+
+  const openDelete = (id: number) => {
+    console.log('delete:', id);
+  }
+ 
+  const isModalAddActive = ref(false);
+  const isModalUpdateActive = ref(false);
 
   const openModal = () => {
-    isModalActive.value = true;
+    isModalAddActive.value = true;
+  }
+
+  const openUpdate = (id: number) => {
+    const countryToUpdate = state.countries.find((item: any) => item.id === id);
+    if (countryToUpdate) {
+      setValues({ 
+        name: countryToUpdate.name,
+        currency: countryToUpdate.currency  
+      });
+      isModalUpdateActive.value = true;
+    }
   }
 
   onMounted(async () => {

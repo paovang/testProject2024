@@ -3,7 +3,7 @@ import Test from "../views/Test.vue";
 import User from "../views/User.vue";
 import Test2 from "../views/Test2.vue";
 import Test3 from "../views/Test3.vue";
-import Country from "../views/Country.vue";
+import { countryRoute } from "../views/module/admin/router";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +15,7 @@ const router = createRouter({
         { path: "user", name: "user", component: User },
         { path: "test2", component: Test2 },
         { path: "test3", component: Test3 },
-        { path: "country", name: "country", component: Country },
+        ...countryRoute,
       ],
     },
     {
