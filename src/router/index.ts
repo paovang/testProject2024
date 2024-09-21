@@ -4,6 +4,7 @@ import User from "../views/User.vue";
 import Test2 from "../views/Test2.vue";
 import Test3 from "../views/Test3.vue";
 import { countryRoute } from "../views/module/admin/router";
+import { roomTypeRoute } from "../views/module/room-type/router";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +17,7 @@ const router = createRouter({
         { path: "test2", component: Test2 },
         { path: "test3", component: Test3 },
         ...countryRoute,
+        ...roomTypeRoute,
       ],
     },
     {
