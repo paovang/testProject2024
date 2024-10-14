@@ -22,11 +22,11 @@
                 <input
                 class="input is-link"
                 type="text"
-                v-model="currency"
-                :class="{ 'is-danger': errors.currency }"
-                placeholder="Please enter currency"
+                v-model="description"
+                :class="{ 'is-danger': errors.description }"
+                placeholder="Please enter description"
                 />
-                <p v-if="errors.currency" class="help is-danger">{{ errors.currency }}</p>
+                <p v-if="errors.description" class="help is-danger">{{ errors.description }}</p>
             </div>
             <footer class="modal-card-foot">
             <div class="buttons">
@@ -44,7 +44,7 @@
     import { validationSchema } from '../schema/index';
     import { testUseStore } from '../store/index';
 
-    const { update } = testUseStore();
+    const { update, form } = testUseStore();
 
     const emit = defineEmits(['update:closeModal']);
 
@@ -64,10 +64,12 @@
     });
   
     const { value: name } = useField<string>('name');
-    const { value: currency } = useField<string>('currency');
-  
+    const { value: description } = useField<string>('description');
+    
     const onSubmit = handleSubmit(async(value) => {
-      await update(value);
+        form.name = value.name;
+        form.description = value.description;
+      await update(form);
     });
 
 
@@ -77,9 +79,11 @@
 
     watch(() => props.itemValue, (newItem) => {
         if (Object.keys(newItem).length > 0) {
+            form.id = newItem.id;
+
             setValues({
                 name: newItem.name,
-                currency: newItem.currency
+                description: newItem.description
             });
         }
     }, { immediate: true });

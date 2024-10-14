@@ -11,16 +11,16 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Currency</th>
+              <th>Description</th>
               <th>Created</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, idx) in state.countries" :key="idx">
+            <tr v-for="(item, idx) in state.props" :key="idx">
               <td>{{idx+1}}</td>
               <td>{{item.name}}</td>
-              <td>{{item.currency}}</td>
+              <td>{{item.description}}</td>
               <td>{{item.created_at}}</td>
               <td>
                 <i class="fas fa-pen" style="width: 50px; color: blue" @click="openUpdate(item.id)"></i>
@@ -68,7 +68,7 @@
     }
   
     const openUpdate = (id: number) => {
-      const countryToUpdate = state.countries.find((item: any) => item.id === id);
+      const countryToUpdate = state.props.find((item: any) => item.id === id);
       if (countryToUpdate) {
         item.value = countryToUpdate;
         isModalUpdateActive.value = true;

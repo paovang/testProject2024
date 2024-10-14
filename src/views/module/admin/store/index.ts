@@ -1,4 +1,3 @@
-import axios from "axios";
 import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 import { AdminService } from "../service";
@@ -8,6 +7,11 @@ export const testUseStore = defineStore("test-store", () => {
   const service = container.resolve<AdminService>(AdminService);
 
   const message = ref("");
+  const form = reactive<any>({
+    name: "",
+    description: "",
+    id: "",
+  });
 
   function increment() {
     message.value = "Hello world!";
@@ -15,22 +19,14 @@ export const testUseStore = defineStore("test-store", () => {
   }
 
   const state = reactive<any>({
-    countries: [],
+    props: [],
     country: {},
   });
 
   // put, post, get, delete
   async function getAll() {
-    await axios({
-      method: "get",
-      url: "https://api.hellonewyears.com/api/countries",
-    })
-      .then(function (res) {
-        state.countries = res.data.data;
-      })
-      .catch(function (error) {
-        console.error("Error fetching countries:", error);
-      });
+    const res = await service.getAll();
+    state.props = res.data.results;
   }
 
   async function create(value: any) {
@@ -41,5 +37,5 @@ export const testUseStore = defineStore("test-store", () => {
     await service.update(value);
   }
 
-  return { message, increment, state, getAll, create, update };
+  return { message, increment, state, getAll, create, update, form };
 });
