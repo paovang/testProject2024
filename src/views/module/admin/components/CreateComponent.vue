@@ -39,22 +39,19 @@
     </div>
 </template>
 <script setup lang="ts">
-    import * as yup from 'yup';
     import { useField, useForm } from 'vee-validate';
+    import { validationSchema } from '../schema/index';
+    import { testUseStore } from '../store/index';
 
+    const { create } = testUseStore();
+
+    const emit = defineEmits(['update:closeModal']);
     defineProps({
         isModalAddActive: {
             type: Boolean,
             required: true
         },
     })
-
-    const validationSchema = yup.object({
-      name: yup.string().required('Please enter name.'),
-      currency: yup.string()
-        .required('Please enter currency.')
-        .max(3, 'Currency must be at most 3 characters.')
-    });
 
     const { handleSubmit, errors } = useForm({
       validationSchema
@@ -64,11 +61,11 @@
     const { value: currency } = useField<string>('currency');
   
     const onSubmit = handleSubmit(async(value) => {
-      console.log('Submitted values:', value);
+        await create(value);
     });
 
 
     const closeModal = () => {
-        console.log('closeModal');
+        emit('update:closeModal', false);
     }
 </script>

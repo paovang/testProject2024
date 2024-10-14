@@ -23,9 +23,9 @@
 
 <script setup lang="ts">
     import axios from 'axios';
-    import { reactive, onMounted } from 'vue';
+    import { reactive, onMounted, ref } from 'vue';
 
-    const roomTypes = reactive<any>([]);
+    const roomTypes = ref<any>([]);
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI3NDk5MDI2LCJpYXQiOjE3MjY4OTQyMjYsImp0aSI6IjJmZGZkNTQwNDdiODQxMTViMGI3MjVmMDk5MTg0NGI4IiwidXNlcl9pZCI6MywiZW1haWwiOiJ0ZXN0MUBnbWFpbC5jb20ifQ.7fWT4MjaMeORdh8PfF33nxA3NelAbOvA2Lz89yZ1aCE';
 
     const fetchAll = async () => {
@@ -37,7 +37,7 @@
             },
         })
         .then(function (res) {
-            roomTypes = res.data.data;
+            roomTypes.value = res.data.data;
         })
         .catch(function (error) {
             console.error("Error fetching countries:", error);

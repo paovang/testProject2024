@@ -31,11 +31,11 @@
         </table>
   
         <!-- Modal Add -->
-        <CreateComponent :is-modal-add-active="isModalAddActive" />
+        <CreateComponent :is-modal-add-active="isModalAddActive" @update:close-modal="isModalAddActive = $event" />
         <!-- End Modal Add -->
   
         <!-- Modal Update -->
-        <UpdateComponent :item-value="item" :is-modal-update-active="isModalUpdateActive" />
+        <UpdateComponent :item-value="item" :is-modal-update-active="isModalUpdateActive" @update:close-modal="isModalUpdateActive = $event" />
         <!-- End Modal Update -->
   
     </div>

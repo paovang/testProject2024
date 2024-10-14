@@ -39,11 +39,14 @@
     </div>
 </template>
 <script setup lang="ts">
-    import * as yup from 'yup';
     import { useField, useForm } from 'vee-validate';
     import { watch } from 'vue';
+    import { validationSchema } from '../schema/index';
+    import { testUseStore } from '../store/index';
 
-    const emit = defineEmits(['update:isModalUpdateActive']);
+    const { update } = testUseStore();
+
+    const emit = defineEmits(['update:closeModal']);
 
     const props = defineProps({
         isModalUpdateActive: {
@@ -56,13 +59,6 @@
         }
     })
 
-    const validationSchema = yup.object({
-      name: yup.string().required('Please enter name.'),
-      currency: yup.string()
-        .required('Please enter currency.')
-        .max(3, 'Currency must be at most 3 characters.')
-    });
-
     const { handleSubmit, errors, setValues } = useForm({
       validationSchema
     });
@@ -71,13 +67,12 @@
     const { value: currency } = useField<string>('currency');
   
     const onSubmit = handleSubmit(async(value) => {
-      console.log('Submitted values:', value);
+      await update(value);
     });
 
 
     const closeModal = () => {
-        console.log('closeModal');
-        emit('update:isModalUpdateActive', false);
+        emit('update:closeModal', false);
     }
 
     watch(() => props.itemValue, (newItem) => {

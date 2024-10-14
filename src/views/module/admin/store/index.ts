@@ -1,8 +1,12 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
+import { AdminService } from "../service";
+import { container } from "tsyringe";
 
 export const testUseStore = defineStore("test-store", () => {
+  const service = container.resolve<AdminService>(AdminService);
+
   const message = ref("");
 
   function increment() {
@@ -29,5 +33,13 @@ export const testUseStore = defineStore("test-store", () => {
       });
   }
 
-  return { message, increment, state, getAll };
+  async function create(value: any) {
+    await service.create(value);
+  }
+
+  async function update(value: any) {
+    await service.update(value);
+  }
+
+  return { message, increment, state, getAll, create, update };
 });

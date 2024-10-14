@@ -14,6 +14,18 @@
     "noEmit": true,
     "jsx": "preserve",
 
+    /** reflect-metadata && tsyringe */
+    "types": ["reflect-metadata"],
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
